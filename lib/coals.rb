@@ -1,5 +1,6 @@
 require "coals/version"
 
-module Coals
-  # Your code goes here...
-end
+require 'coals/menu'
+require 'coals/runner'
+require 'coals/task'
+require 'coals/menu'
