@@ -1,0 +1,87 @@
+require: rubocop-rspec
+
+AllCops:
+  DisplayCopNames: true
+  ExtraDetails: true
+  Exclude:
+    - 'tmp/**/*'
+
+Lint/UselessAssignment:
+  Exclude:
+    - 'bin/console'
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/features/**/*'
+    - 'spec/requests/**/*'
+
+RSpec/ExampleLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Exclude:
+    - 'valis.gemspec'
+  ExcludedMethods:
+    - configure
+    - context
+    - define
+    - describe
+    - draw
+    - factory
+    - feature
+    - guard
+    - included
+    - it
+    - let
+    - let!
+    - scenario
+    - setup
+    - shared_context
+    - shared_examples
+    - shared_examples_for
+    - transaction
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/LineLength:
+  Max: 120
+  # Ignores annotate output
+  IgnoredPatterns: ['\A# \*\*']
+  IgnoreCopDirectives: true
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockDelimiters:
+  SupportedStyles:
+    - line_count_based
+    - braces_for_chaining
+
+Style/ConditionalAssignment:
+  Severity: warning
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GlobalVars:
+  AllowedVariables:
+    - $flipper
+
+Style/GuardClause:
+  Enabled: false
+
+Style/ModuleFunction:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/SingleLineBlockParams:
+  Enabled: false
