@@ -87,7 +87,7 @@ module Coals
     end
 
     def arguments_menu
-      desc = `zeus rake --describe #{@task.command}`.split("\n")[1].chomp
+      desc = `bundle exec rake --describe #{@task.command}`.split("\n")[1].chomp
       @task.arguments_prompt
     end
   end
