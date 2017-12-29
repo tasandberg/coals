@@ -5,4 +5,3 @@ module Coals
     end
   end
 end
-

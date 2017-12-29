@@ -1,7 +1,7 @@
 module Coals
   class Menu
     MENU_WIDTH = 4
-    
+
     attr_reader :selection
 
     # Show a menu of options in a loop until the user makes a selection.
@@ -22,23 +22,23 @@ module Coals
       menu = @title
       menu += format_menu_options(@options)
       println menu
-      get_user_selection
+      integer_input
     end
 
-    def get_user_selection
+    def integer_input
       print @prompt + '> '
       option_index = get_input.to_i - 1
       @selection = @options[option_index] if @options[option_index]
     end
 
-    def get_input
+    def raw_input
       $stdin.gets.chomp
     end
 
     def println(str)
       $stdout.puts str
     end
-    
+
     def print(str)
       $stdout.print str
     end

@@ -1,10 +1,8 @@
 require: rubocop-rspec
-
 AllCops:
+  TargetRubyVersion: 2.3
   DisplayCopNames: true
   ExtraDetails: true
-  TargetRubyVersion:
-    - 2.3.0
   Exclude:
     - 'tmp/**/*'
 
@@ -22,7 +20,7 @@ RSpec/ExampleLength:
 
 Metrics/BlockLength:
   Exclude:
-    - 'valis.gemspec'
+    - 'coals.gemspec'
   ExcludedMethods:
     - configure
     - context

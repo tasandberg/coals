@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "coals"
+require 'bundler/setup'
+require 'coals'
 def reload!
   load 'coals.rb'
 end
@@ -12,5 +12,5 @@ end
 # require "pry"
 # Pry.start
 
-require "irb"
+require 'irb'
 IRB.start(__FILE__)
