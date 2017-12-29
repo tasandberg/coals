@@ -27,7 +27,7 @@ module Coals
 
     def integer_input
       print @prompt + '> '
-      option_index = get_input.to_i - 1
+      option_index = raw_input.to_i - 1
       @selection = @options[option_index] if @options[option_index]
     end
 
