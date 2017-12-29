@@ -1,4 +1,5 @@
 require 'coals/version'
 require 'coals/menu'
+require 'coals/prompt'
+require 'coals/task_tree'
 require 'coals/runner'
-require 'coals/task'

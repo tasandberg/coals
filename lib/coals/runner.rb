@@ -1,11 +1,10 @@
-DESCRIPTION_REGEX = /\s+#\s(.+)/
-COMMAND_REGEX = /rake (\S+)/
-ARGS_REGEX = /\S+\[(\S+)\]/
-
 module Coals
   class RakeRunner
+    include Coals::Prompt
+    include Coals::TaskTree
+
     def initialize
-      @tasks = build_tasks
+      @tasks = task_tree
       @full_command = nil
       @task = nil
       @group_key = nil
@@ -13,12 +12,11 @@ module Coals
     end
 
     def run
-      until @group_key
-        groups_menu
-        entry = Integer(gets.chomp)
-        @group_key = @tasks.keys[entry - 1] if (1..(@tasks.keys.length)).member?(entry)
-        puts ""
-      end
+      @group_key = capture_selection(
+        title: 'Rake Task Groups',
+        prompt: 'Select task group',
+        options: @tasks
+      )
 
       until @task
         command_menu
@@ -51,30 +49,6 @@ module Coals
     end
 
     private
-
-    def build_tasks
-      result = `bundle exec rake --tasks`
-      rows = result.split("\n")
-      rows.each_with_object({}) do |r, object|
-        task = Task.new(r)
-        if task.group
-          object[task.group] ||= []
-          object[task.group] << task
-        else
-          object[task.command] = [task]
-        end
-      end
-    end
-
-    def print_menu(options, title, width = 4)
-      menu = title
-      options.each_with_index do |option, i|
-        menu += "\n" if (i % width).zero?
-        menu += "#{i + 1}.".ljust(4) + option.ljust(30)
-      end
-      puts menu
-      puts 'Choose an option:'
-    end
 
     def groups_menu
       options = @tasks.keys.map { |group| "#{group} (#{@tasks[group].size})" }

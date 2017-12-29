@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+# This adds the local lib/ to the load path so we can
+# test the CLI without building the gem
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
+require 'coals'
+
+Coals::RakeRunner.new.run

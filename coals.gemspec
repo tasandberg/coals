@@ -20,16 +20,16 @@ Gem::Specification.new do |spec|
   spec.homepage      = "http://github.com/Timmehs/coals"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
+  spec.files         = Dir['lib/**/*.rb']
   spec.bindir        = "bin"
   spec.executables   = ['coals']
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.16.a"
+  spec.add_development_dependency "bundler", "~> 1.16.1"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.7.0"
   spec.add_development_dependency "pry", "~> 0.11.3"
   spec.add_development_dependency "pry-byebug", "~> 3.5.1"
+  spec.add_development_dependency "guard"
+  spec.add_development_dependency "guard-rspec"
 end
