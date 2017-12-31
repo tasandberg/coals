@@ -1,14 +1,12 @@
 module Coals
   class Menu
-    MENU_WIDTH = 4
-
     attr_reader :selection
 
     # Show a menu of options in a loop until the user makes a selection.
     # Return the selection value
     #
     # @param menu {Array} - list of options to choose from
-    def initialize(options:, prompt: '', title: '')
+    def initialize(options:, prompt: nil, title: '')
       @select = nil
       @options = options
       @title = title
@@ -19,20 +17,22 @@ module Coals
     private
 
     def show_menu
-      menu = @title
-      menu += format_menu_options(@options)
+      menu = "\n\n" + "COALS".black.bold + ": "
+      menu += @title.brown
+      menu += format_menu_options
       println menu
       integer_input
     end
 
     def integer_input
-      print @prompt + '> '
+      print 'Choose an option: '.bold
       option_index = raw_input.to_i - 1
-      @selection = @options[option_index] if @options[option_index]
+      @selection = @options.values[option_index]
     end
 
     def raw_input
-      $stdin.gets.chomp
+      input = $stdin.gets.chomp
+      /quit|exit|q/.match(input) ? abort('Goodbye 👋') : input
     end
 
     def println(str)
@@ -43,9 +43,13 @@ module Coals
       $stdout.print str
     end
 
-    def format_menu_options(options)
-      options.each_with_index.inject('') do |result, (option, i)|
-        result += "\n" if (i % MENU_WIDTH).zero?
+    def columns_per_window
+      `tput cols`.chomp.to_i / 34
+    end
+
+    def format_menu_options
+      @options.keys.each_with_index.inject('') do |result, (option, i)|
+        result += "\n" if (i % columns_per_window).zero?
         result + "#{i + 1}.".ljust(4) + option.ljust(30)
       end
     end

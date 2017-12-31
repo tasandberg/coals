@@ -12,39 +12,20 @@ module Coals
     end
 
     def run
-      @group_key = capture_selection(
-        title: 'Rake Task Groups',
-        prompt: 'Select task group',
-        options: @tasks
-      )
-
-      until @task
-        command_menu
-        entry = Integer(gets.chomp)
-        @task = @tasks[@group_key][entry - 1]
-        puts ""
-      end
-
-      until @task.runnable?
-        arguments_menu
-      end
-
       until @confirmed
-        puts 'REVIEW COMMAND'
-        puts @task.build_command
-        puts 'Run? (yes/no)'
-        entry = gets.chomp
-        @confirmed = entry == 'yes'
-        puts ""
-      end
+        @namespace = capture_selection(
+          title: 'Avalable Task Groups:',
+          options: build_namespace_options
+        )
 
-      puts `#{@task.build_command}`
-    rescue ArgumentError => e
-      if e.message =~ /invalid value for Integer\(\)/
-        puts 'Please enter a number'
-        run
-      else
-        raise e
+        @task = capture_selection(
+          title: "Available '#{@namespace}' commands:",
+          options: build_task_options
+        )
+
+        # @arguments = menu
+        # @confirmed = menu
+        # run
       end
     end
 
@@ -55,9 +36,21 @@ module Coals
       print_menu(options, 'Available Task Groups')
     end
 
-    def command_menu
-      menu_items = @tasks[@group_key].map(&:full_command)
-      print_menu(menu_items, "Available `#{@group_key}` Commands", 1)
+    def build_namespace_options
+      @tasks.each_with_object({}) do |(group, tasks), options|
+        options["#{group} (#{tasks.length})"] = group
+      end
+    end
+
+    def subtasks
+      @tasks[@namespace]
+    end
+
+    def build_task_options
+      subtasks.each_with_object({}) do |task, options|
+        label = task.name_with_args.to_s.ljust(30) + '# ' + task.comment
+        options[label] = task
+      end
     end
 
     def arguments_menu

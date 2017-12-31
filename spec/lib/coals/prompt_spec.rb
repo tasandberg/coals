@@ -14,10 +14,21 @@ RSpec.describe Coals::Prompt do
   end
 
   describe '#capture_selection' do
+    subject { dummy_instance.capture_selection(options: options).result }
+
+    let(:options) do
+      {
+        'Brown' => 'brown',
+        'Grey' => 'grey',
+        'White' => 'white',
+        'Tan' => 'tan'
+      }
+    end
+
     it 'creates a menu with the options and returns the user selection' do
       allow($stdin).to receive(:gets).and_return "2\n"
-      result = dummy_instance.capture_selection(options: %w[Brown Grey White Tan])
-      expect(result).to eq 'Grey'
+      result = dummy_instance.capture_selection(options: options)
+      expect(result).to eq 'grey'
     end
   end
 end

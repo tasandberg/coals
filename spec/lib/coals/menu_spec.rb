@@ -4,7 +4,12 @@ RSpec.describe Coals::Menu do
   subject(:menu) { described_class.new(title: 'Favorite Color', options: options) }
 
   let(:user_input) { "1\n" }
-  let(:options) { %w[Option1 Option2] }
+  let(:options) do
+    {
+      'Option 1' => 'option1',
+      'Option 2' => 'option2'
+    }
+  end
 
   before do
     allow($stdin).to receive(:gets).and_return user_input
@@ -15,15 +20,11 @@ RSpec.describe Coals::Menu do
   it 'prints a menu of options to the screen' do
     menu_string = nil
     allow($stdout).to receive(:puts) { |arg| menu_string = arg }
-    expected_output = <<~MENU
-      Favorite Color
-      1.  Option1                       2.  Option2
-    MENU
     menu
-    expect(menu_string.chomp).to match expected_output.chomp
+    expect(menu_string).to include('1.  Option 1', '2.  Option 2')
   end
 
   it 'captures the value of a user selection' do
-    expect(menu.selection).to eq 'Option1'
+    expect(menu.selection).to eq 'option1'
   end
 end

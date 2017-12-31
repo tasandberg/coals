@@ -1,9 +1,20 @@
 require 'rake'
 
+module Rake
+  class Task
+    def namespace
+      name.split(':')[0]
+    end
+  end
+end
+
+
 module Coals
   module TaskTree
     def task_tree
-      @_task_tree ||= build_tasks
+      @_task_tree ||= build_tasks.each_with_object(Hash.new { |h, k| h[k] = [] }) do |task, tree|
+        tree[task.namespace] << task
+      end
     end
 
     # Coals assumes that any task lacking a description
