@@ -20,16 +20,18 @@ module Coals
     ITALIC:         3,
     UNDERLINE:      4
   }.freeze
-end
 
-class String
-  def colorize(code)
-    "\033[#{code}m#{self}\033[0m"
-  end
+  module Highlight
+    refine String do
+      def colorize(code)
+        "\033[#{code}m#{self}\033[0m"
+      end
 
-  Coals::COLORS.each do |color_name, code|
-    define_method color_name.downcase.to_sym do
-      colorize(code)
+      COLORS.each do |color_name, code|
+        define_method color_name.downcase.to_sym do
+          colorize(code)
+        end
+      end
     end
   end
 end

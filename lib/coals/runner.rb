@@ -11,6 +11,7 @@ module Coals
       @confirmed = false
     end
 
+    # TODO: Some cascading condition set such that user can back up or go forward by 1 step
     def run
       until @confirmed
         @namespace = capture_selection(
@@ -22,10 +23,6 @@ module Coals
           title: "Available '#{@namespace}' commands:",
           options: build_task_options
         )
-
-        # @arguments = menu
-        # @confirmed = menu
-        # run
       end
     end
 
@@ -51,11 +48,6 @@ module Coals
         label = task.name_with_args.to_s.ljust(30) + '# ' + task.comment
         options[label] = task
       end
-    end
-
-    def arguments_menu
-      desc = `bundle exec rake --describe #{@task.command}`.split("\n")[1].chomp
-      @task.arguments_prompt
     end
   end
 end

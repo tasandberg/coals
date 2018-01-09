@@ -1,5 +1,6 @@
 module Coals
   class Menu
+    using Coals::Highlight
     attr_reader :selection
 
     # Show a menu of options in a loop until the user makes a selection.
@@ -17,22 +18,21 @@ module Coals
     private
 
     def show_menu
-      menu = "\n\n" + "COALS".black.bold + ": "
-      menu += @title.brown
+      menu = "\nCOALS -- #{@title}\n".brown
       menu += format_menu_options
       println menu
       integer_input
     end
 
     def integer_input
-      print 'Choose an option: '.bold
+      print "\nChoose an option: ".bold
       option_index = raw_input.to_i - 1
       @selection = @options.values[option_index]
     end
 
     def raw_input
       input = $stdin.gets.chomp
-      /quit|exit|q/.match(input) ? abort('Goodbye 👋') : input
+      input =~ /quit|exit|q/ ? abort('Goodbye 👋') : input
     end
 
     def println(str)
@@ -43,8 +43,13 @@ module Coals
       $stdout.print str
     end
 
+    def min_column_width
+      @options.keys.max_by(&:length).length
+    end
+
     def columns_per_window
-      `tput cols`.chomp.to_i / 34
+      cols = `tput cols`.chomp.to_i / min_column_width
+      cols > 3 ? 3 : cols
     end
 
     def format_menu_options
