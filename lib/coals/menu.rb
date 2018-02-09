@@ -47,15 +47,9 @@ module Coals
       @options.keys.max_by(&:length).length
     end
 
-    def columns_per_window
-      cols = `tput cols`.chomp.to_i / min_column_width
-      cols > 3 ? 3 : cols
-    end
-
     def format_menu_options
       @options.keys.each_with_index.inject('') do |result, (option, i)|
-        result += "\n" if (i % columns_per_window).zero?
-        result + "#{i + 1}.".ljust(4) + option.ljust(30)
+        result + "\n#{i + 1}.".ljust(4) + option.ljust(30)
       end
     end
   end

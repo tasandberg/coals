@@ -7,6 +7,7 @@ module Coals
       @tasks = task_tree
       @full_command = nil
       @task = nil
+      @task_arguments = nil
       @group_key = nil
       @confirmed = false
     end
@@ -23,7 +24,16 @@ module Coals
           title: "Available '#{@namespace}' commands:",
           options: build_task_options
         )
+
+        @task_arguments = @task.arg_names.each_with_object({}) { |arg, obj| obj[arg] = nil }
+
+        capture_task_arguments while @task_arguments.values.any?(&:nil?)
+
+        @confirmed = capture_confirmation
       end
+
+      # Invoke ensures that prerequirement tasks like rails :environment are run first.
+      @task.invoke(*@task_arguments.values)
     end
 
     private
@@ -35,8 +45,31 @@ module Coals
 
     def build_namespace_options
       @tasks.each_with_object({}) do |(group, tasks), options|
-        options["#{group} (#{tasks.length})"] = group
+        options["#{group} (#{tasks.length})".ljust(55)] = group
       end
+    end
+
+    def capture_task_arguments
+      @task_arguments.select { |_, v| v.nil? }.each_key do |arg_name|
+        input = ''
+        while input.empty?
+          puts "Rake task '#{@task.name_with_args}': enter #{arg_name}"
+          input = gets.chomp
+        end
+        @task_arguments[arg_name] = input
+      end
+    end
+
+    def capture_confirmation
+      input = nil
+
+      until /y|yes|n|no/ =~ input
+        puts 'Execute rake task? (y/n)'
+        puts "   rake #{@task.name}[#{@task_arguments.values.join(',')}]"
+        input = gets.chomp.downcase
+      end
+
+      !!(/y|yes/ =~ input)
     end
 
     def subtasks

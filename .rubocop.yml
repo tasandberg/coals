@@ -61,6 +61,9 @@ Style/BlockDelimiters:
 Style/ConditionalAssignment:
   Severity: warning
 
+Style/DoubleNegation:
+  Enabled: false
+
 Style/FormatStringToken:
   Enabled: false
 
