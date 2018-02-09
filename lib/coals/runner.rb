@@ -7,7 +7,7 @@ module Coals
       @tasks = task_tree
       @full_command = nil
       @task = nil
-      @task_arguments = nil
+      @task_arguments = {}
       @group_key = nil
       @confirmed = false
     end
@@ -25,9 +25,10 @@ module Coals
           options: build_task_options
         )
 
-        @task_arguments = @task.arg_names.each_with_object({}) { |arg, obj| obj[arg] = nil }
-
-        capture_task_arguments while @task_arguments.values.any?(&:nil?)
+        unless @task.arg_names.empty?
+          @task_arguments = @task.arg_names.each_with_object({}) { |arg, obj| obj[arg] = nil }
+          capture_task_arguments while @task_arguments.values.any?(&:nil?)
+        end
 
         @confirmed = capture_confirmation
       end
@@ -53,7 +54,7 @@ module Coals
       @task_arguments.select { |_, v| v.nil? }.each_key do |arg_name|
         input = ''
         while input.empty?
-          puts "Rake task '#{@task.name_with_args}': enter #{arg_name}"
+          print "\nRake task '#{@task.name_with_args}'\nEnter #{arg_name}: "
           input = gets.chomp
         end
         @task_arguments[arg_name] = input
@@ -64,8 +65,10 @@ module Coals
       input = nil
 
       until /y|yes|n|no/ =~ input
+        task_string = "rake #{@task.name}"
+        task_string += "[#{@task_arguments.values.join(',')}]" if @task_arguments.size.positive?
         puts 'Execute rake task? (y/n)'
-        puts "   rake #{@task.name}[#{@task_arguments.values.join(',')}]"
+        puts "   #{task_string}"
         input = gets.chomp.downcase
       end
 

@@ -21,7 +21,7 @@ RSpec.describe Coals::Menu do
     menu_string = nil
     allow($stdout).to receive(:puts) { |arg| menu_string = arg }
     menu
-    expect(menu_string).to include('1.  Option 1', '2.  Option 2')
+    expect(menu_string).to include('1. Option 1', '2. Option 2')
   end
 
   it 'captures the value of a user selection' do
